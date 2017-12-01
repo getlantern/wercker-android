@@ -22,14 +22,13 @@ ENV ANDROID_BIN /usr/local/android-sdk-tools/tools/bin
 # Install Android NDK
 ENV ANDROID_NDK_VERSION r15c
 
+RUN cd /usr/local && wget --show-progress https://dl.google.com/android/repository/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
 RUN cd /usr/local && \
-wget --show-progress https://dl.google.com/android/repository/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
-
-RUN cd /usr/local/ && \
 unzip android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip && \
+mv android-ndk-$ANDROID_NDK_VERSION /opt/android-ndk && \
 rm android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
 
-ENV ANDROID_NDK_HOME /usr/local/android-ndk-$ANDROID_NDK_VERSION
+ENV ANDROID_NDK_HOME /opt/android-ndk
 
 # Install Android tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
@@ -55,3 +54,4 @@ ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
 ENV PATH $PATH:/usr/local/go/bin
 ENV GOPATH /usr/local/go
+
