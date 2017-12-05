@@ -47,7 +47,6 @@ rm go$GO_VERSION.linux-amd64.tar.gz
 
 # Environment variables
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-ENV GRADLE_HOME /usr/local/gradle-4.4.0-RC1
 ENV PATH $PATH:$ANDROID_HOME/tools
 ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
@@ -69,11 +68,12 @@ mv linux-amd64/glide /usr/local/go/bin && \
 rm glide.tar.gz
 
 # Install Gradle
-ENV GRADLE_VERSION 4.1.0
+ENV GRADLE_VERSION 4.3.1
 RUN cd /usr/local/ && \
 wget https://github.com/gradle/gradle/archive/v$GRADLE_VERSION.zip && \
 unzip v$GRADLE_VERSION.zip && \
 mv gradle-$GRADLE_VERSION gradle && \
 rm v$GRADLE_VERSION.zip
+ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
 ENV PATH $PATH:/usr/local/gradle
 RUN gradlew
