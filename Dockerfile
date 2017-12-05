@@ -52,6 +52,7 @@ ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
 ENV PATH $PATH:/usr/local/go/go$GO_VERSION/bin
 ENV PATH $PATH:/usr/local/go/bin
+ENV PATH $PATH:$ANDROID_NDK_HOME
 ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
