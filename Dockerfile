@@ -36,15 +36,14 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
 RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-26
 
-RUN cd /usr/local/ && \
-wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz && \
-tar xvf go1.9.2.linux-amd64.tar.gz && \
-rm go1.9.2.linux-amd64.tar.gz
+ENV GO_VERSION 1.9.2
 
-# Install Gradle
-RUN cd /usr/local/ && \
-wget https://github.com/gradle/gradle/archive/v4.4.0-RC1.zip && \
-unzip v4.4.0-RC1.zip
+RUN mkdir /usr/local/go/ && \
+cd /usr/local/go && \
+wget https://redirector.gvt1.com/edgedl/go/go$GO_VERSION.linux-amd64.tar.gz && \
+tar xvf go$GO_VERSION.linux-amd64.tar.gz && \
+mv go go$GO_VERSION && \
+rm go$GO_VERSION.linux-amd64.tar.gz
 
 # Environment variables
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
@@ -52,6 +51,29 @@ ENV GRADLE_HOME /usr/local/gradle-4.4.0-RC1
 ENV PATH $PATH:$ANDROID_HOME/tools
 ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
+ENV PATH $PATH:/usr/local/go/go$GO_VERSION/bin
 ENV PATH $PATH:/usr/local/go/bin
-ENV GOPATH /usr/local/go
+ENV GOROOT /usr/local/go/go$GO_VERSION
+ENV GOPATH /usr/local/go/
 
+# Install go
+RUN go get golang.org/x/mobile/cmd/gomobile
+RUN gomobile init
+
+# Install Glide
+ENV GLIDE_VERSION 0.13.1
+RUN cd /tmp && \
+curl -L https://github.com/Masterminds/glide/releases/download/v$GLIDE_VERSION/glide-v$GLIDE_VERSION-linux-amd64.tar.gz -o glide.tar.gz && \
+tar -xf glide.tar.gz && \
+mv linux-amd64/glide /usr/local/go/bin && \
+rm glide.tar.gz
+
+# Install Gradle
+ENV GRADLE_VERSION 4.1.0
+RUN cd /usr/local/ && \
+wget https://github.com/gradle/gradle/archive/v$GRADLE_VERSION.zip && \
+unzip v$GRADLE_VERSION.zip && \
+mv gradle-$GRADLE_VERSION gradle && \
+rm v$GRADLE_VERSION.zip
+ENV PATH $PATH:/usr/local/gradle
+RUN gradlew
