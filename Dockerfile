@@ -58,7 +58,6 @@ ENV GOPATH /usr/local/go/
 
 # Install go
 RUN go get golang.org/x/mobile/cmd/gomobile
-RUN gomobile init
 
 # Install Glide
 ENV GLIDE_VERSION 0.13.1
@@ -71,10 +70,10 @@ rm glide.tar.gz
 # Install Gradle
 ENV GRADLE_VERSION 4.3.1
 RUN cd /usr/local/ && \
-wget https://github.com/gradle/gradle/archive/v$GRADLE_VERSION.zip && \
-unzip v$GRADLE_VERSION.zip && \
+wget https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
+unzip gradle-$GRADLE_VERSION-bin.zip && \
 mv gradle-$GRADLE_VERSION gradle && \
-rm v$GRADLE_VERSION.zip
+rm gradle-$GRADLE_VERSION-bin.zip
 ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
-ENV PATH $PATH:/usr/local/gradle
-RUN gradlew
+ENV PATH $PATH:/usr/local/gradle/bin
+
