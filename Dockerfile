@@ -5,7 +5,7 @@ RUN apt-get update
 
 # Install Java RUN apt-get install -y openjdk-7-jre
 RUN apt-get install -y apt-utils
-RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git
+RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git file
 
 # Install Android SDK
 RUN mkdir /usr/local/android-sdk-tools && \
