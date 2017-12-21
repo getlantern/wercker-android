@@ -68,7 +68,7 @@ mv linux-amd64/glide /usr/local/go/bin && \
 rm glide.tar.gz
 
 # Install Gradle
-ENV GRADLE_VERSION 4.3.1
+ENV GRADLE_VERSION 4.1
 RUN cd /usr/local/ && \
 wget https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
 unzip gradle-$GRADLE_VERSION-bin.zip && \
@@ -76,4 +76,3 @@ mv gradle-$GRADLE_VERSION gradle && \
 rm gradle-$GRADLE_VERSION-bin.zip
 ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
 ENV PATH $PATH:/usr/local/gradle/bin
-
