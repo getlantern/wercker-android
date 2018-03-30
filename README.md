@@ -6,4 +6,10 @@
 
 ## Deploy
 
-`docker push getlantern/wercker-android`
+```
+docker build -t getlantern/wercker-android .
+docker login
+docker push getlantern/wercker-android
+```
+
+For logging in the docker hub user name is getlantern and the password is in 1pass.
