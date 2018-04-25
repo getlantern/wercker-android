@@ -20,7 +20,7 @@ ENV ANDROID_HOME /usr/local/android-sdk-tools
 ENV ANDROID_BIN /usr/local/android-sdk-tools/tools/bin
 
 # Install Android NDK
-ENV ANDROID_NDK_VERSION r15c
+ENV ANDROID_NDK_VERSION r16b
 
 RUN cd /usr/local && wget --show-progress https://dl.google.com/android/repository/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
 RUN cd /usr/local && \
@@ -36,7 +36,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
 RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-26
 
-ENV GO_VERSION 1.9.2
+ENV GO_VERSION 1.9.5
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
@@ -56,19 +56,14 @@ ENV PATH $PATH:$ANDROID_NDK_HOME
 ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
-# Install go
+# Install gomobile
 RUN go get golang.org/x/mobile/cmd/gomobile
 
-# Install Glide
-ENV GLIDE_VERSION 0.13.1
-RUN cd /tmp && \
-curl -L https://github.com/Masterminds/glide/releases/download/v$GLIDE_VERSION/glide-v$GLIDE_VERSION-linux-amd64.tar.gz -o glide.tar.gz && \
-tar -xf glide.tar.gz && \
-mv linux-amd64/glide /usr/local/go/bin && \
-rm glide.tar.gz
+# Install dep
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 # Install Gradle
-ENV GRADLE_VERSION 4.6
+ENV GRADLE_VERSION 4.7
 RUN cd /usr/local/ && \
 wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
 unzip gradle-$GRADLE_VERSION-bin.zip && \
