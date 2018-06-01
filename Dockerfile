@@ -20,7 +20,7 @@ ENV ANDROID_HOME /usr/local/android-sdk-tools
 ENV ANDROID_BIN /usr/local/android-sdk-tools/tools/bin
 
 # Install Android NDK
-ENV ANDROID_NDK_VERSION r16b
+ENV ANDROID_NDK_VERSION r17
 
 RUN cd /usr/local && wget --show-progress https://dl.google.com/android/repository/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
 RUN cd /usr/local && \
@@ -36,7 +36,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
 RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-26
 
-ENV GO_VERSION 1.9.5
+ENV GO_VERSION 1.10.2
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
