@@ -12,4 +12,4 @@ docker login
 docker push getlantern/wercker-android
 ```
 
-For logging in the docker hub user name is getlantern and the password is in 1pass.
+For logging in the docker hub user name is **getlantern** and the password is in 1pass under "**Docker Hub**".
