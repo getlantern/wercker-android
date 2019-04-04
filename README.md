@@ -6,9 +6,11 @@
 
 ## Deploy
 
+Just run 'deploy.bash', which essentially does the following:
+
 ```
-docker build -t getlantern/wercker-android .
 docker login
+docker build -t getlantern/wercker-android .
 docker push getlantern/wercker-android
 ```
 
