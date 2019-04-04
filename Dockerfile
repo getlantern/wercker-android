@@ -7,36 +7,29 @@ RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git file
 
-# Install Android SDK
+# Install Android SDK. You can update this from here:
+# https://developer.android.com/studio#downloads
+ENV SDK_TOOLS sdk-tools-linux-4333796.zip
+
 RUN mkdir /usr/local/android-sdk-tools && \
 cd /usr/local/android-sdk-tools && \
-wget --show-progress https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+wget --show-progress https://s3.amazonaws.com/lantern/$SDK_TOOLS
 
 RUN cd /usr/local/android-sdk-tools && \
-unzip sdk-tools-linux-3859397.zip && \
-rm sdk-tools-linux-3859397.zip
+unzip $SDK_TOOLS && \
+rm $SDK_TOOLS
 
 ENV ANDROID_HOME /usr/local/android-sdk-tools
 ENV ANDROID_BIN /usr/local/android-sdk-tools/tools/bin
-
-# Install Android NDK
-ENV ANDROID_NDK_VERSION r17
-
-RUN cd /usr/local && wget --show-progress https://dl.google.com/android/repository/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
-RUN cd /usr/local && \
-unzip android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip && \
-mv android-ndk-$ANDROID_NDK_VERSION /opt/android-ndk && \
-rm android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.zip
-
-ENV ANDROID_NDK_HOME /opt/android-ndk
 
 # Install Android tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
-RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-26
+RUN yes | $ANDROID_HOME/tools/bin/sdkmanager ndk-bundle
+RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-28
 
-ENV GO_VERSION 1.10.2
+ENV GO_VERSION 1.12.1
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
@@ -52,7 +45,7 @@ ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
 ENV PATH $PATH:/usr/local/go/go$GO_VERSION/bin
 ENV PATH $PATH:/usr/local/go/bin
-ENV PATH $PATH:$ANDROID_NDK_HOME
+ENV PATH $PATH:$ANDROID_HOME/ndk-bundle
 ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
@@ -63,7 +56,7 @@ RUN go get golang.org/x/mobile/cmd/gomobile
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 # Install Gradle
-ENV GRADLE_VERSION 4.7
+ENV GRADLE_VERSION 5.3.1
 RUN cd /usr/local/ && \
 wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
 unzip gradle-$GRADLE_VERSION-bin.zip && \
