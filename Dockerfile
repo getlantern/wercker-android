@@ -49,6 +49,9 @@ ENV PATH $PATH:$ANDROID_HOME/ndk-bundle
 ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
+# Install dep
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+
 # Install gomobile
 RUN go get -u golang.org/x/mobile/cmd/gomobile
 
