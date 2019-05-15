@@ -29,7 +29,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager ndk-bundle
 RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-28
 
-ENV GO_VERSION 1.12.1
+ENV GO_VERSION 1.12.5
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
@@ -50,13 +50,10 @@ ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
 # Install gomobile
-RUN go get golang.org/x/mobile/cmd/gomobile
-
-# Install dep
-RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+RUN go get -u golang.org/x/mobile/cmd/gomobile
 
 # Install Gradle
-ENV GRADLE_VERSION 5.3.1
+ENV GRADLE_VERSION 5.4
 RUN cd /usr/local/ && \
 wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
 unzip gradle-$GRADLE_VERSION-bin.zip && \
