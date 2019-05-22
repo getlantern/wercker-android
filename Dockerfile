@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Ulysses Aalto <uaalto@getlantern.org>
+MAINTAINER Lantern Team <admin@getlantern.org>
 
 RUN apt-get update
 
@@ -49,14 +49,18 @@ ENV PATH $PATH:$ANDROID_HOME/ndk-bundle
 ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
+# Install gomobile
+RUN go get golang.org/x/mobile/cmd/gomobile
+RUN gomobile init
+
+RUN go get golang.org/x/tools/cmd/cover
+RUN go get github.com/mattn/goveralls
+
 # Install dep
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
-# Install gomobile
-RUN go get -u golang.org/x/mobile/cmd/gomobile
-
 # Install Gradle
-ENV GRADLE_VERSION 5.4
+ENV GRADLE_VERSION 5.4.1
 RUN cd /usr/local/ && \
 wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
 unzip gradle-$GRADLE_VERSION-bin.zip && \
