@@ -7,6 +7,8 @@ RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git file
 
+RUN apt-get install -y libpcap-dev
+
 # Install Android SDK. You can update this from here:
 # https://developer.android.com/studio#downloads
 ENV SDK_TOOLS sdk-tools-linux-4333796.zip
