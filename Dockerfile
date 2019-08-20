@@ -31,7 +31,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager ndk-bundle
 RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-28
 
-ENV GO_VERSION 1.12.5
+ENV GO_VERSION 1.12.9
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
