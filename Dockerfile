@@ -70,3 +70,5 @@ mv gradle-$GRADLE_VERSION gradle && \
 rm gradle-$GRADLE_VERSION-bin.zip
 ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
 ENV PATH $PATH:/usr/local/gradle/bin
+
+RUN apt-get install -y pkg-config
