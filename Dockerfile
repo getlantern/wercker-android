@@ -53,6 +53,7 @@ ENV GOPATH /usr/local/go/
 
 # Install gomobile
 RUN GO111MODULE=off go get golang.org/x/mobile/cmd/gomobile
+RUN GO111MODULE=off go get golang.org/x/mobile/cmd/gobind
 RUN GO111MODULE=off gomobile init
 
 RUN GO111MODULE=off go get golang.org/x/tools/cmd/cover
@@ -72,3 +73,4 @@ ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
 ENV PATH $PATH:/usr/local/gradle/bin
 
 RUN apt-get install -y pkg-config
+RUN apt-get install -y lsof libpcap-dev libappindicator3-dev libwebkit2gtk-4.0-dev
