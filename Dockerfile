@@ -52,11 +52,11 @@ ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
 # Install gomobile
-RUN go get golang.org/x/mobile/cmd/gomobile
-RUN gomobile init
+RUN GO111MODULE=off go get golang.org/x/mobile/cmd/gomobile
+RUN GO111MODULE=off gomobile init
 
-RUN go get golang.org/x/tools/cmd/cover
-RUN go get github.com/mattn/goveralls
+RUN GO111MODULE=off go get golang.org/x/tools/cmd/cover
+RUN GO111MODULE=off go get github.com/mattn/goveralls
 
 # Install dep
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
