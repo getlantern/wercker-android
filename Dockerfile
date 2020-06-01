@@ -31,7 +31,7 @@ RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager ndk-bundle
 RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-28
 
-ENV GO_VERSION 1.12.9
+ENV GO_VERSION 1.14.3
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
@@ -63,7 +63,7 @@ RUN GO111MODULE=off go get github.com/mattn/goveralls
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 # Install Gradle
-ENV GRADLE_VERSION 5.4.1
+ENV GRADLE_VERSION 6.4.1
 RUN cd /usr/local/ && \
 wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
 unzip gradle-$GRADLE_VERSION-bin.zip && \
