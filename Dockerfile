@@ -74,3 +74,10 @@ ENV PATH $PATH:/usr/local/gradle/bin
 
 RUN apt-get install -y pkg-config
 RUN apt-get install -y lsof libpcap-dev libappindicator3-dev libwebkit2gtk-4.0-dev
+
+# Genymotion Cloud
+RUN apt-get install -y python3 python3-pip
+RUN pip3 install gmsaas
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+RUN gmsaas config set android-sdk-path $ANDROID_HOME
