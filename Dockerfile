@@ -3,34 +3,48 @@ MAINTAINER Lantern Team <admin@getlantern.org>
 
 RUN apt-get update
 
-# Install Java RUN apt-get install -y openjdk-7-jre
+# Install build tools and native dependencies
+RUN apt-get install -y pkg-config
+RUN apt-get install -y lsof libpcap-dev libappindicator3-dev libwebkit2gtk-4.0-dev
+
+# Install Java
 RUN apt-get install -y apt-utils
 RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git file
 
-RUN apt-get install -y libpcap-dev
+# Install Gradle
+ENV GRADLE_VERSION 6.4.1
+RUN cd /usr/local/ && \
+wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
+unzip gradle-$GRADLE_VERSION-bin.zip && \
+mv gradle-$GRADLE_VERSION gradle && \
+rm gradle-$GRADLE_VERSION-bin.zip
+ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
+ENV PATH $PATH:/usr/local/gradle/bin
 
 # Install Android SDK. You can update this from here:
 # https://developer.android.com/studio#downloads
-ENV SDK_TOOLS sdk-tools-linux-4333796.zip
+ENV SDK_TOOLS commandlinetools-linux-6609375_latest.zip
 
-RUN mkdir /usr/local/android-sdk-tools && \
-cd /usr/local/android-sdk-tools && \
-wget --show-progress https://s3.amazonaws.com/lantern/$SDK_TOOLS
+RUN mkdir -p /usr/local/android/cmdline-tools
+COPY $SDK_TOOLS /usr/local/android/cmdline-tools
 
-RUN cd /usr/local/android-sdk-tools && \
+RUN cd /usr/local/android/cmdline-tools && \
 unzip $SDK_TOOLS && \
 rm $SDK_TOOLS
 
-ENV ANDROID_HOME /usr/local/android-sdk-tools
-ENV ANDROID_BIN /usr/local/android-sdk-tools/tools/bin
+ENV ANDROID_HOME /usr/local/android/
+ENV ANDROID_BIN /usr/local/android/cmdline-tools/tools/bin
+ENV PATH=${ANDROID_BIN}:${PATH}
 
 # Install Android tools
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager tools
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager platform-tools
-RUN yes | $ANDROID_HOME/tools/bin/sdkmanager ndk-bundle
-RUN $ANDROID_HOME/tools/bin/sdkmanager platforms\;android-28
+RUN yes | $ANDROID_BIN/sdkmanager --licenses
+RUN yes | $ANDROID_BIN/sdkmanager "build-tools;30.0.2"
+RUN yes | $ANDROID_BIN/sdkmanager platform-tools
+RUN yes | $ANDROID_BIN/sdkmanager ndk-bundle
+RUN yes | $ANDROID_BIN/sdkmanager "ndk;21.3.6528147"
+RUN $ANDROID_BIN/sdkmanager "platforms;android-30"
 
+# Install Go
 ENV GO_VERSION 1.14.4
 
 RUN mkdir /usr/local/go/ && \
@@ -47,7 +61,7 @@ ENV PATH $PATH:$ANDROID_HOME/platform-tools
 ENV PATH $PATH:$GRADLE_HOME/bin
 ENV PATH $PATH:/usr/local/go/go$GO_VERSION/bin
 ENV PATH $PATH:/usr/local/go/bin
-ENV PATH $PATH:$ANDROID_HOME/ndk-bundle
+ENV PATH $PATH:$ANDROID_HOME/ndk
 ENV GOROOT /usr/local/go/go$GO_VERSION
 ENV GOPATH /usr/local/go/
 
@@ -61,19 +75,6 @@ RUN GO111MODULE=off go get github.com/mattn/goveralls
 
 # Install dep
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-
-# Install Gradle
-ENV GRADLE_VERSION 6.4.1
-RUN cd /usr/local/ && \
-wget https://downloads.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && \
-unzip gradle-$GRADLE_VERSION-bin.zip && \
-mv gradle-$GRADLE_VERSION gradle && \
-rm gradle-$GRADLE_VERSION-bin.zip
-ENV GRADLE_HOME /usr/local/gradle-$GRADLE_VERSION
-ENV PATH $PATH:/usr/local/gradle/bin
-
-RUN apt-get install -y pkg-config
-RUN apt-get install -y lsof libpcap-dev libappindicator3-dev libwebkit2gtk-4.0-dev
 
 # Genymotion Cloud
 RUN apt-get install -y python3 python3-pip
