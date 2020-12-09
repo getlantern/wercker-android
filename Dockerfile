@@ -45,7 +45,7 @@ RUN yes | $ANDROID_BIN/sdkmanager "ndk;21.3.6528147"
 RUN $ANDROID_BIN/sdkmanager "platforms;android-30"
 
 # Install Go
-ENV GO_VERSION 1.14.4
+ENV GO_VERSION 1.15.6
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
