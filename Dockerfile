@@ -1,5 +1,7 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 MAINTAINER Lantern Team <admin@getlantern.org>
+
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 
@@ -7,9 +9,9 @@ RUN apt-get update
 RUN apt-get install -y pkg-config
 RUN apt-get install -y lsof libpcap-dev libappindicator3-dev libwebkit2gtk-4.0-dev
 
-# Install Java
+# Install Java and other dev tools
 RUN apt-get install -y apt-utils
-RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git file
+RUN apt-get install -y openjdk-8-jdk curl wget unzip build-essential git git-lfs file
 
 # Install Gradle
 ENV GRADLE_VERSION 6.4.1
@@ -23,17 +25,18 @@ ENV PATH $PATH:/usr/local/gradle/bin
 
 # Install Android SDK. You can update this from here:
 # https://developer.android.com/studio#downloads
-ENV SDK_TOOLS commandlinetools-linux-6609375_latest.zip
+ENV SDK_TOOLS commandlinetools-linux-7302050_latest.zip
 
 RUN mkdir -p /usr/local/android/cmdline-tools
 COPY $SDK_TOOLS /usr/local/android/cmdline-tools
 
 RUN cd /usr/local/android/cmdline-tools && \
 unzip $SDK_TOOLS && \
-rm $SDK_TOOLS
+rm $SDK_TOOLS && \
+mv cmdline-tools latest
 
 ENV ANDROID_HOME /usr/local/android/
-ENV ANDROID_BIN /usr/local/android/cmdline-tools/tools/bin
+ENV ANDROID_BIN /usr/local/android/cmdline-tools/latest/bin
 ENV PATH=${ANDROID_BIN}:${PATH}
 
 # Install Android tools
@@ -41,11 +44,11 @@ RUN yes | $ANDROID_BIN/sdkmanager --licenses
 RUN yes | $ANDROID_BIN/sdkmanager "build-tools;30.0.2"
 RUN yes | $ANDROID_BIN/sdkmanager platform-tools
 RUN yes | $ANDROID_BIN/sdkmanager ndk-bundle
-RUN yes | $ANDROID_BIN/sdkmanager "ndk;21.3.6528147"
+RUN yes | $ANDROID_BIN/sdkmanager "ndk;22.1.7171670"
 RUN $ANDROID_BIN/sdkmanager "platforms;android-30"
 
 # Install Go
-ENV GO_VERSION 1.15.6
+ENV GO_VERSION 1.15.10
 
 RUN mkdir /usr/local/go/ && \
 cd /usr/local/go && \
@@ -82,3 +85,8 @@ RUN pip3 install gmsaas
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 RUN gmsaas config set android-sdk-path $ANDROID_HOME
+
+# Flutter
+RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.0.6-stable.tar.xz
+RUN tar xf flutter_linux_2.0.6-stable.tar.xz
+RUN mv flutter /usr/local/
