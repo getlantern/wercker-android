@@ -90,3 +90,5 @@ RUN gmsaas config set android-sdk-path $ANDROID_HOME
 RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.0.6-stable.tar.xz
 RUN tar xf flutter_linux_2.0.6-stable.tar.xz
 RUN mv flutter /usr/local/
+ENV PATH $PATH:/usr/local/flutter/bin/:/usr/local/flutter/bin/cache/dart-sdk/bin
+RUN flutter doctor -v
